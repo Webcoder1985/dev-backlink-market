@@ -1,0 +1,96 @@
+<mxfile host="app.diagrams.net" modified="2021-12-02T13:17:25.787Z" agent="5.0 (Windows)" etag="1TxND3lj_uunSxuoFPXZ" version="15.8.6" type="github">
+  <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
+    <mxGraphModel dx="1798" dy="689" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
+        <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
+        <mxCell id="WIyWlLk6GJQsqaUBKTNV-6" value="&lt;div&gt;Admin Action&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;shadow=0;fontFamily=Helvetica;fontSize=12;align=center;strokeWidth=1;spacing=6;spacingTop=-4;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="315" y="430" width="100" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="z_KAuhuDqd6TNWYJx3mP-3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startArrow=none;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="FC2huOxuHlbS-az7_Oyq-1" target="WIyWlLk6GJQsqaUBKTNV-6" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="420" y="120" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="us1KMaRaIffKch248EVU-10" value="User requests a Withdrawal. Check users.sell_balance" style="whiteSpace=wrap;html=1;rounded=1;shadow=0;strokeWidth=1;glass=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="272.5" y="40" width="185" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="FC2huOxuHlbS-az7_Oyq-7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="us1KMaRaIffKch248EVU-14" target="FC2huOxuHlbS-az7_Oyq-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="us1KMaRaIffKch248EVU-14" value="&lt;div&gt;Balance deducted from users.sell_balance &lt;br&gt;&lt;/div&gt;" style="whiteSpace=wrap;html=1;rounded=1;shadow=0;strokeWidth=1;glass=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="180" y="550" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="z_KAuhuDqd6TNWYJx3mP-7" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="WIyWlLk6GJQsqaUBKTNV-6" target="us1KMaRaIffKch248EVU-14" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="280" y="530" as="sourcePoint" />
+            <mxPoint x="330" y="480" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="265" y="470" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="z_KAuhuDqd6TNWYJx3mP-8" value="Approve" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="272.5" y="490" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="z_KAuhuDqd6TNWYJx3mP-9" value="status updated in withdraw table" style="whiteSpace=wrap;html=1;rounded=1;shadow=0;strokeWidth=1;glass=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="424" y="550" width="155" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="z_KAuhuDqd6TNWYJx3mP-10" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" target="z_KAuhuDqd6TNWYJx3mP-9" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="415" y="470" as="sourcePoint" />
+            <mxPoint x="465" y="420" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="500" y="470" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="z_KAuhuDqd6TNWYJx3mP-11" value="Reject" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="440" y="500" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="FC2huOxuHlbS-az7_Oyq-4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="z_KAuhuDqd6TNWYJx3mP-15" target="FC2huOxuHlbS-az7_Oyq-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="z_KAuhuDqd6TNWYJx3mP-15" value="&lt;div&gt;&lt;span&gt;if balance is &lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;greater than 50 and no pending withdrawal &lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;request exist&lt;/span&gt;&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="280" y="110" width="170" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="z_KAuhuDqd6TNWYJx3mP-16" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="us1KMaRaIffKch248EVU-10" target="z_KAuhuDqd6TNWYJx3mP-15" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="365" y="90" as="sourcePoint" />
+            <mxPoint x="365" y="210" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="z_KAuhuDqd6TNWYJx3mP-17" value="Yes" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="364" y="230" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="z_KAuhuDqd6TNWYJx3mP-18" value="Sent to admin for approval" style="rounded=1;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="305" y="340" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="FC2huOxuHlbS-az7_Oyq-1" value="Insert request to blmkt_withdraw with status pending" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="305" y="260" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="FC2huOxuHlbS-az7_Oyq-2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startArrow=none;endArrow=none;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="z_KAuhuDqd6TNWYJx3mP-15" target="FC2huOxuHlbS-az7_Oyq-1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="365" y="430" as="targetPoint" />
+            <mxPoint x="365" y="250" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FC2huOxuHlbS-az7_Oyq-3" value="Display a Message saying min. Withdrawal is 50" style="whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="510" y="150" width="165" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="FC2huOxuHlbS-az7_Oyq-5" value="&lt;div&gt;No&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="425" y="180" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="FC2huOxuHlbS-az7_Oyq-9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="FC2huOxuHlbS-az7_Oyq-6" target="FC2huOxuHlbS-az7_Oyq-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FC2huOxuHlbS-az7_Oyq-6" value="add new entry in blkmkt_user_balance_history" style="whiteSpace=wrap;html=1;rounded=1;shadow=0;strokeWidth=1;glass=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="180" y="620" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="FC2huOxuHlbS-az7_Oyq-8" value="Set status paid in blmkt_withdraw" style="whiteSpace=wrap;html=1;rounded=1;shadow=0;strokeWidth=1;glass=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="180" y="690" width="170" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

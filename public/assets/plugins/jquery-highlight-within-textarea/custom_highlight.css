@@ -1,0 +1,25 @@
+		.hwt-container {
+				background-color: inherit;
+			}
+
+			.hwt-content {
+				width: 680px  !important;
+				height: 100px  !important;
+				padding: 5px !important;;
+				border: 1px solid #adb5bd !important; ;
+				color: inherit;
+			}
+
+			.hwt-input:focus {
+				outline-color: #495057;
+			}
+
+			.hwt-content mark {
+				border-radius: 3px;
+				background-color: #c1ffbf;
+			}
+            .hwt-backdrop {
+                margin: 0 !important;
+            }
+
+

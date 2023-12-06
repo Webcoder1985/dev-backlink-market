@@ -1,0 +1,377 @@
+<?php
+
+namespace App\Http\Controllers\Member;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Page;
+use App\Models\SellerSite;
+use DataTables;
+
+class MarketPlaceController extends Controller
+{
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    public function index(Request $request)
+    {
+        if($request->ajax())
+        {
+            $pages = Page::where('seller_id', '=', \Auth::user()->id);
+            if(\Auth::user()->user_status == 3)
+            {
+                $pages = Page::query();
+            }
+            return DataTables::eloquent($pages)
+                ->filter(function($query) use ($request)
+                {
+                    if(!empty($request->get('columns')))
+                    {
+                        $searchVal = $request->get('columns');
+                        $searchKeyword = $request->get('search');
+                        if(isset($searchKeyword) && !empty($searchKeyword) && !empty($searchKeyword['value']))
+                        {
+                            $query->where(function ($query) use ($searchKeyword) {
+                                $query->orWhere('seller_site_url', 'like', "%{$searchKeyword['value']}%")
+                                    ->orWhere('seller_site_page_url', 'like', "%{$searchKeyword['value']}%")
+                                    ->orWhere('title', 'like', "%{$searchKeyword['value']}%");
+                            });
+                        }
+
+                        if(isset($searchVal[1]) && !empty($searchVal[1]['search']['value']))
+                        {
+                            $data = explode(',', $searchVal[1]['search']['value']);
+                            if(!empty($data))
+                            {
+                                $query->where(function ($query) use ($data) {
+                                    $query->where('moz_da', '>=', $data[0]);
+                                    $query->where('moz_da', '<=', $data[1]);
+                                });
+                            }
+                        }
+
+                        if(isset($searchVal[2]) && !empty($searchVal[2]['search']['value']))
+                        {
+                            $data = explode(',', $searchVal[2]['search']['value']);
+                            if(!empty($data))
+                            {
+                                $query->where(function ($query) use ($data) {
+                                    $query->where('moz_pa', '>=', $data[0]);
+                                    $query->where('moz_pa', '<=', $data[1]);
+                                });
+                            }
+                        }
+
+                        if(isset($searchVal[3]) && !empty($searchVal[3]['search']['value']))
+                        {
+                            $data = explode(',', $searchVal[3]['search']['value']);
+                            if(!empty($data))
+                            {
+                                $query->where(function ($query) use ($data) {
+                                    $query->where('maj_tf', '>=', $data[0]);
+                                    $query->where('maj_tf', '<=', $data[1]);
+                                });
+                            }
+                        }
+
+                        if(isset($searchVal[4]) && !empty($searchVal[4]['search']['value']))
+                        {
+                            $data = explode(',', $searchVal[4]['search']['value']);
+                            if(!empty($data))
+                            {
+                                $query->where(function ($query) use ($data) {
+                                    $query->where('maj_cf', '>=', $data[0]);
+                                    $query->where('maj_cf', '<=', $data[1]);
+                                });
+                            }
+                        }
+
+                        if(isset($searchVal[5]) && !empty($searchVal[5]['search']['value']))
+                        {
+                            $data = explode(',', $searchVal[5]['search']['value']);
+                            if(!empty($data))
+                            {
+                                $query->where(function ($query) use ($data) {
+                                    $query->where('rd', '>=', $data[0]);
+                                    $query->where('rd', '<=', $data[1]);
+                                });
+                            }
+                        }
+
+                        if(isset($searchVal[6]) && !empty($searchVal[6]['search']['value']))
+                        {
+                            $data = explode(',', $searchVal[6]['search']['value']);
+                            if(!empty($data))
+                            {
+                                $query->where(function ($query) use ($data) {
+                                    $query->where('obl', '>=', $data[0]);
+                                    $query->where('obl', '<=', $data[1]);
+                                });
+                            }
+                        }
+
+                        if(isset($searchVal[12]) && !empty($searchVal[12]['search']['value']))
+                        {
+                            $data = explode(',', $searchVal[12]['search']['value']);
+                            if(!empty($data))
+                            {
+                                $query->where(function ($query) use ($data) {
+                                    $query->where('price_display', '>=', $data[0]);
+                                    $query->where('price_display', '<=', $data[1]);
+                                });
+                            }
+                        }
+
+                        if(isset($searchVal[8]) && !empty($searchVal[8]['search']['value']))
+                        {
+                            $data = explode(',', $searchVal[8]['search']['value']);
+                            if(!empty($data) && !in_array('all',  $data))
+                            {
+                                $query->whereIn('language', $data);
+                            }
+                        }
+
+                        if(isset($searchVal[9]) && !empty($searchVal[9]['search']['value']))
+                        {
+                            $data = explode(',', $searchVal[9]['search']['value']);
+                            if(!empty($data) && !in_array('all',  $data))
+                            {
+                                $query->whereIn('tld', $data);
+                            }
+                        }
+
+                        if(isset($searchVal[10]) && !empty($searchVal[10]['search']['value']))
+                        {
+                            $data = explode(',', $searchVal[10]['search']['value']);
+                            if(!empty($data) && !in_array('all',  $data))
+                            {
+                                $query->whereIn('category', $data);
+                            }
+                        }
+
+                        if(isset($searchVal[7]) && !empty($searchVal[7]['search']['value']))
+                        {
+                            $data = explode(',', $searchVal[7]['search']['value']);
+                            if(!empty($data) && !in_array('all',  $data))
+                            {
+                                $query->whereIn('country', $data);
+                            }
+                        }
+                        if(isset($searchVal[11]) && !empty($searchVal[11]['search']['value']))
+                        {
+                            $data = $searchVal[11]['search']['value'];
+                            if($data!="all" && $data!="")
+                            {
+                                $query->where('is_active', ($data=="active"?"1":"0"));
+                            }
+                        }
+                    }
+
+                })
+                ->editColumn('price_display', function($data) {
+                    return '$' . $data->price_display;
+                })
+                ->editColumn('is_active', function($data) {
+                    $html = '';
+                    if($data->is_active)
+                    {
+                        $html = '<span class="badge badge-success">Yes</span>';
+                    }
+                    else
+                    {
+                        $html = '<span class="badge badge-danger">No</span>';
+                    }
+                    return $html;
+                })
+                ->editColumn('actions', function($data) {
+                    $carts = \Cart::content();
+                    //$html = '';
+                    $disable = '';
+                    $checked = '';
+                    if(count($carts) > 0)
+                    {
+                        foreach($carts as $cart)
+                        {
+                          if($data->id == $cart->id)
+                          {
+                            $disable = 'disabled="disabled"';
+                            $checked = 'checked';
+                          }
+                        }
+                        //$disable = '';
+                    }
+                    else
+                    {
+                        $disable = '';
+                        $checked = '';
+                    }
+                    return '<input type="checkbox" class="pr_chk" data-id = "'.$data->id.'" data-price="'.$data->price_display.'" name="product_id[]" value="'.$data->id.'" '.$disable.' '.$checked.'>
+                ';
+                })
+                ->rawColumns(['price_display', 'is_active', 'actions'])
+                ->make(true);
+        }
+        if(\Auth::user()->user_status == 3)
+        {
+            $da_min = Page::min('moz_da');
+            $da_max = Page::max('moz_da');
+            $pa_min = Page::min('moz_pa');
+            $pa_max = Page::max('moz_pa');
+            $tf_min = Page::min('maj_tf');
+            $tf_max = Page::max('maj_tf');
+            $cf_min = Page::min('maj_cf');
+            $cf_max = Page::max('maj_cf');
+            $obl_min = Page::min('obl');
+            $obl_max = Page::max('obl');
+            $price_min = Page::min('price_display');
+            $price_max = Page::max('price_display');
+            $rd_min = Page::min('rd');
+            $rd_max = Page::max('rd');
+            $languages = Page::groupBy('language')->select('language')->get();
+            $categories = Page::groupBy('category')->select('category')->get();
+            $countries = Page::groupBy('country')->select('country')->get();
+            $tlds = Page::groupBy('tld')->select('tld')->get();
+        }
+        else
+        {
+            $da_min = Page::min('moz_da');
+            $da_max = Page::max('moz_da');
+            $pa_min = Page::min('moz_pa');
+            $pa_max = Page::max('moz_pa');
+            $tf_min = Page::min('maj_tf');
+            $tf_max = Page::max('maj_tf');
+            $cf_min = Page::min('maj_cf');
+            $cf_max = Page::max('maj_cf');
+            $obl_min = Page::min('obl');
+            $obl_max = Page::max('obl');
+            $price_min = Page::min('price_display');
+            $price_max = Page::max('price_display');
+            $rd_min = Page::min('rd');
+            $rd_max = Page::max('rd');
+            $languages = Page::where('seller_id', '=', \Auth::user()->id)->groupBy('language')->select('language')->get();
+            $categories = Page::where('seller_id', '=', \Auth::user()->id)->groupBy('category')->select('category')->get();
+            $countries = Page::where('seller_id', '=', \Auth::user()->id)->groupBy('country')->select('country')->get();
+            $tlds = Page::where('seller_id', '=', \Auth::user()->id)->groupBy('tld')->select('tld')->get();
+        }
+        return view('member.marketPlace', compact('da_min', 'da_max', 'pa_min', 'pa_max', 'tf_min', 'tf_max', 'cf_min', 'cf_max', 'languages', 'categories', 'tlds', 'price_min', 'price_max', 'obl_min', 'obl_max', 'rd_min', 'rd_max', 'countries'));
+    }
+
+    public function sellerPageForm($id = null, Request $request)
+    {
+        $sites = SellerSite::where('seller_id',\Auth::user()->id)->select('id', 'site_url')->get();
+        $page = [];
+        if(isset($id) && !empty($id))
+        {
+            $page = Page::where('seller_id', \Auth::user()->id)->where('id', $id)->first();
+        }
+        return view('member.seller_page_form', compact('sites', 'page'));
+    }
+
+    public function savePage(Request $request)
+    {
+        $request->validate([
+            'seller_site_id' => 'required|exists:blmkt_sites,id',
+            'seller_site_page_id' => 'required|integer',
+            'seller_site_page_url' => 'required|url',
+            'moz_da' => 'required|integer',
+            'moz_pa' => 'required|integer',
+            'maj_tf' => 'required|integer',
+            'maj_cf' => 'required|integer',
+            'rd' => 'required|integer',
+            'obl' => 'required|integer',
+            'language' => 'required|max:2',
+            'country' => 'required|max:2',
+            'tld' => 'required|max:50',
+            'category' => 'required',
+            'title' => 'required',
+            'price_user' => 'required|numeric',
+        ], [
+            'seller_site_id' => 'Site',
+            'seller_site_page_id' => 'Page Id',
+            'seller_site_page_url' => 'Page URL',
+            'moz_da' => 'DA (MOZ)',
+            'moz_pa' => 'PA (MOZ)',
+            'maj_tf' => 'TF (Maj.)',
+            'maj_cf' => 'CF (Maj.)',
+            'rd' => 'RD',
+            'obl' => 'OBL',
+            'language' => 'Language',
+            'country' => 'Country',
+            'tld' => 'TLD',
+            'category' => 'Category',
+            'title' => 'Title',
+            'price_user' => 'Price',
+        ]);
+
+        $data = $request->all();
+        $page = Page::where('seller_id', \Auth::user()->id)->where('id', $data['id'])->first();
+        if(isset($data['id']) && $data['id'] != 0 && $page)
+        {
+            $site = SellerSite::find($data['seller_site_id']);
+            $page->update([
+                'seller_site_id' => $site->id,
+                'seller_site_url' => $site->site_url,
+                'seller_site_page_id' => $data['seller_site_page_id'],
+                'seller_site_page_url' => $data['seller_site_page_url'],
+                'moz_da' => $data['moz_da'],
+                'moz_pa' => $data['moz_pa'],
+                'maj_tf' => $data['maj_tf'],
+                'maj_cf' => $data['maj_cf'],
+                'rd' => $data['rd'],
+                'obl' => $data['obl'],
+                'language' => $data['language'],
+                'country' => $data['country'],
+                'tld' => $data['tld'],
+                'category' => $data['category'],
+                'title' => $data['title'],
+                'price_user' => $data['price_user'],
+                'price_display' => $data['price_user'],
+                'is_active' => (isset($data['is_active']) ? 1 : 0),
+                'indexed' => (isset($data['indexed']) ? 1 : 0),
+                'last_metric_update_time' => \Carbon\Carbon::now()
+            ]);
+            return response()->json(['status' => 'success', 'product' => $page], 200);
+        }
+        else
+        {
+            $site = SellerSite::find($data['seller_site_id']);
+            $page = Page::create([
+                'seller_id' => \Auth::user()->id,
+                'seller_site_id' => $site->id,
+                'seller_site_url' => $site->site_url,
+                'seller_site_page_id' => $data['seller_site_page_id'],
+                'seller_site_page_url' => $data['seller_site_page_url'],
+                'moz_da' => $data['moz_da'],
+                'moz_pa' => $data['moz_pa'],
+                'maj_tf' => $data['maj_tf'],
+                'maj_cf' => $data['maj_cf'],
+                'rd' => $data['rd'],
+                'obl' => $data['obl'],
+                'language' => $data['language'],
+                'country' => $data['country'],
+                'tld' => $data['tld'],
+                'category' => $data['category'],
+                'title' => $data['title'],
+                'price_user' => $data['price_user'],
+                'price_display' => $data['price_user'],
+                'is_active' => (isset($data['is_active']) ? 1 : 0),
+                'indexed' => (isset($data['indexed']) ? 1 : 0),
+                'last_metric_update_time' => \Carbon\Carbon::now()
+            ]);
+            return response()->json(['status' => 'success', 'product' => $page], 200);
+        }
+        return response()->json(['errors' => ['msg' => 'Something went wrong!']], 422);
+    }
+
+    public function deletePage($id, Request $request)
+    {
+        $page = Page::where('seller_id', \Auth::user()->id)->where('id', $id)->first();
+        if($page)
+        {
+            $page->delete();
+            return response()->json(['success' => 'success'], 200);
+        }
+        return response()->json(['errors' => ['msg' => 'Something went wrong!']], 422);
+    }
+}

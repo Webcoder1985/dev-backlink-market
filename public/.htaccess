@@ -1,0 +1,65 @@
+<IfModule mod_rewrite.c>
+RewriteBase /
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # non ww to www
+    RewriteCond %{HTTP_HOST} ^backlink-market\.com [NC]
+    RewriteRule (.*) https://www.backlink-market.com/$1 [L,R=301]
+
+
+    # non ssl to ssl
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Remove index.php to prevent duplicate URLs like https://www.backlink-market.com/index.php/sell-backlinks
+    RewriteCond %{THE_REQUEST} /index\.php [NC]
+    RewriteRule ^(.*?)index\.php[^/] /$1? [L,R=301,NC,NE]
+    RewriteCond %{THE_REQUEST} /index\.php [NC]
+    RewriteRule ^(.*?)index\.php(?:/(.*))?$ /$1$2? [L,R=301,NC,NE]
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Send Requests To Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+# cache images and flash content for one month
+<FilesMatch ".(flv|gif|jpg|jpeg|png|ico|swf|svg|webp)$">
+	Header set Cache-Control "max-age=2592000"
+</FilesMatch>
+
+# cache font files for one month
+<FilesMatch ".(woff|woff2|ttf|otf|eot)$">
+	Header set Cache-Control "max-age=2592000"
+</FilesMatch>
+
+# cache text, css, and javascript files for one week
+<FilesMatch ".(js|css|pdf|txt)$">
+	Header set Cache-Control "max-age=604800"
+</FilesMatch>
+
+# cache html and htm files for one day
+<FilesMatch ".(html|htm|php)$">
+	Header set Cache-Control "max-age=43200"
+</FilesMatch>
+
+<IfModule mod_expires.c>
+    ExpiresActive on
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+</IfModule>

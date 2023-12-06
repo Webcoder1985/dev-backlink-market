@@ -1,0 +1,260 @@
+@extends('layout.master')
+@section('title', 'Datatable')
+@section('parentPageTitle', 'Tables')
+@section('page-style')
+<link rel="stylesheet" href="{{asset('assets/plugins/jquery-datatable/dataTables.bootstrap4.min.css')}}"/>
+<link rel="stylesheet" href="{{asset('assets/plugins/jquery-datatable/responsive.dataTables.min.css')}}"/>
+<!-- noUISlider Css -->
+<link rel="stylesheet" href="{{asset('assets/plugins/ion-rangeslider/css/ion.rangeSlider.css')}}" />
+<!-- Select2 -->
+<link rel="stylesheet" href="{{asset('assets/plugins/select2/select2.css')}}" />
+<!-- Sweetalert -->
+<link rel="stylesheet" href="{{asset('assets/plugins/sweetalert/sweetalert.css')}}" />
+@stop
+@section('content')
+<div class="row clearfix">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="header">
+                <div class="row">
+                    <div class="col-6 pt-4">
+                        <h2><strong>Filters</strong></h2>
+                    </div>
+                    <div class="col-6">
+                        @if(\Auth::user()->user_status != 3)
+                            <button class="btn btn-success btn-icon float-right" onclick="openCreatePageModal()"><i class="zmdi zmdi-plus"></i> Add New Page</button>
+                        @endif
+                    </div>
+                </div>
+            </div>
+            <div class="body">
+                <div class="row clearfix mb-4">
+                    <div class="col-md-3 col-sm-6 mb-sm-4">
+                        <div class="irs-demo">
+                            <p><b>DA</b></p>
+                            <input type="text" id="nouislider_da_range" value="" />
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-sm-4">
+                        <div class="irs-demo">
+                            <p><b>PA</b></p>
+                            <input type="text" id="nouislider_pa_range" value="" />
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="irs-demo">
+                            <p><b>TF</b></p>
+                            <input type="text" id="nouislider_tf_range" value="" />
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="irs-demo">
+                            <p><b>CF</b></p>
+                            <input type="text" id="nouislider_cf_range" value="" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row clearfix mb-4">
+                    <div class="col-md-4 col-sm-4">
+                        <div class="irs-demo">
+                            <p><b>RD</b></p>
+                            <input type="text" id="nouislider_rd_range" value="" />
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4">
+                        <div class="irs-demo">
+                            <p><b>Price</b></p>
+                            <input type="text" id="nouislider_price_range" value="" />
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4">
+                        <div class="irs-demo">
+                            <p><b>OBL</b></p>
+                            <input type="text" id="nouislider_obl_range" value="" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row clearfix">
+                    <div class="col-md-3 col-sm-6 mb-sm-4">
+                        <p> <b>Country</b> </p>
+                        <select class="form-control show-tick ms select2 countries" multiple data-placeholder="Select Country">
+                            <option value="all">All</option>
+                            @foreach($countries as $country)
+                            <option>{{$country->country}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-sm-4">
+                        <p> <b>Language</b> </p>
+                        <select class="form-control show-tick ms select2 languages" multiple data-placeholder="Select Language">
+                            <option value="all">All</option>
+                            @foreach($languages as $language)
+                            <option>{{$language->language}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <p> <b>Category</b> </p>
+                        <select class="form-control show-tick ms select2 categories" multiple data-placeholder="Select Category">
+                            <option value="all">All</option>
+                            @foreach($categories as $category)
+                            <option>{{$category->category}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <p> <b>TLD</b> </p>
+                        <select class="form-control show-tick ms select2 tlds" multiple data-placeholder="Select TLD">
+                            <option value="all">All</option>
+                            @foreach($tlds as $tld)
+                            <option>{{$tld->tld}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <p> <b>Active</b> </p>
+                        <select class="form-control show-tick ms select2 is_active"  data-placeholder="Select Status">
+                            <option value="all">All</option>
+                            <option value="active">Active</option>
+                            <option value="deactive">Deactive</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form class="card auth_form mb-0"  id="addToCart" method="POST">
+            @csrf
+        <div class="row">
+        <div class="col-lg-12 table_main">
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table display responsive nowrap table-hover product_item_list c_table theme-color mb-0" id="blogDatatable">
+                    <thead>
+                        <tr>
+                            <th>URL</th>
+                            <th>DA (MOZ)</th>
+                            <th>PA (MOZ)</th>
+                            <th>TF (Maj.)</th>
+                            <th>CF (Maj.)</th>
+                            <th>RD (Maj.)</th>
+                            <th>Obl</th>
+                            <th>Country</th>
+                            <th>Language</th>
+                            <th>tld</th>
+                            <th>Category</th>
+                            <th>Is Active?</th>
+                            <th>Price</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+      </div>
+        <div class="col-lg-3 side_bar_cart" style="display:none;">
+          <div id="cart_items">
+          <h4>Buy Selected Links</h4>
+          <div class="form-group">
+            <label>Promoted URL</label>
+            <input type="url" class="form-control" name="promoted_url" required>
+          </div>
+          <div class="form-group">
+            <label>Content before anchor text</label><span id="before_anchor_text_counter" class="counter_text">250</span>
+            <input type="text" class="form-control" name="content_before_anchor_text" maxlength="250" onkeyup="charcounter(this,'before_anchor_text_counter','250');">
+          </div>
+          <div class="form-group">
+            <label>Anchor text</label><span id="anchor_text_counter" class="counter_text">100</span>
+            <input type="text" class="form-control" name="anchor_text" maxlength="100" onkeyup="charcounter(this,'anchor_text_counter','100');">
+          </div>
+          <div class="form-group">
+            <label>Content after anchor text</label><span id="after_anchor_text_counter" class="counter_text">250</span>
+            <input type="text" class="form-control" name="content_after_anchor_text" maxlength="250" onkeyup="charcounter(this,'after_anchor_text_counter','250');">
+          </div>
+          <div class="form-group">
+            <input type="checkbox" class="" name="no_follow" value="Yes" >&nbsp;&nbsp;<label>No Follow</label>
+          </div>
+          <div class="form-group">
+              <h3><span id="cart_count"></span> links for $<span id="cart_price"></span></h3>
+          </div>
+          <div class="form-group btn_div">
+          <button type="button" class="btn btn-success frmSubmitBtn">
+            <i class="zmdi zmdi-shopping-cart"></i> Add to Cart
+          </button>
+        </div>
+        <div>
+        </div>
+        </div>
+        <div class="cart_success" style="display:none;">
+              <i class="zmdi zmdi-check"></i>
+              <h3 id="cart_res"></h3>
+              <h2>We’ve successfully added the link(s) to your Cart.</h2>
+              <button type="button" class="btn btn-success close_btn">
+                Close
+              </button>
+              <a href="{{ url('/cart') }}" class="btn btn-success">
+                Switch to your cart
+              </a>
+        </div>
+      </div>
+    </div>
+</div>
+@if(\Auth::user()->user_status != 3)
+<div class="modal fade" id="addNewSellerPageModal" tabindex="-1" role="dialog" aria-labelledby="addNewSellerPageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form class="card auth_form mb-0"  id="sellerPageDetail" method="POST">
+                @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addNewSellerPageModalLabel">Create page</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="modalLoading"><i class="zmdi zmdi-settings zmdi-hc-spin"></i> Please wait...</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success frmSubmitBtn"><i class="zmdi zmdi-settings zmdi-hc-spin" style="display: none;"></i> Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endif
+@stop
+@section('page-script')
+<script>
+    var da_min = {{$da_min}};
+    var da_max = {{$da_max}};
+    var pa_min = {{$pa_min}};
+    var pa_max = {{$pa_max}};
+    var tf_min = {{$tf_min}};
+    var tf_max = {{$tf_max}};
+    var cf_min = {{$cf_min}};
+    var cf_max = {{$cf_max}};
+    var price_min = {{$price_min}};
+    var price_max = {{$price_max}};
+    var obl_min = {{$obl_min}};
+    var obl_max = {{$obl_max}};
+    var rd_min = {{$rd_min}};
+    var rd_max = {{$rd_max}};
+    var base_url = '{{url("/")}}';
+    var hideOptions = {{(Auth::user()->user_status != 3) ? 1 : 0}};
+</script>
+<script src="{{asset('assets/bundles/datatablescripts.bundle.js')}}"></script>
+<script src="{{asset('assets/plugins/jquery-datatable/dataTables.responsive.min.js')}}"></script>
+<script src="{{asset('assets/plugins/jquery-datatable/buttons/dataTables.buttons.min.js')}}"></script>
+<script src="{{asset('assets/plugins/jquery-datatable/buttons/buttons.bootstrap4.min.js')}}"></script>
+<script src="{{asset('assets/plugins/jquery-datatable/buttons/buttons.colVis.min.js')}}"></script>
+<script src="{{asset('assets/plugins/jquery-datatable/buttons/buttons.flash.min.js')}}"></script>
+<script src="{{asset('assets/plugins/jquery-datatable/buttons/buttons.html5.min.js')}}"></script>
+<script src="{{asset('assets/plugins/jquery-datatable/buttons/buttons.print.min.js')}}"></script>
+<script src="{{asset('assets/plugins/select2/select2.min.js')}}"></script> <!-- Select2 Js -->
+<script src="{{asset('assets/plugins/ion-rangeslider/js/ion.rangeSlider.js')}}"></script> <!-- noUISlider Plugin Js -->
+<script src="{{asset('assets/plugins/sweetalert/sweetalert.min.js')}}"></script> <!-- Sweetalert Js -->
+<script src="{{asset('assets/js/pages/tables/jquery-datatable.js')}}"></script>
+<script src="{{asset('assets/js/pages/marketplace.js')}}"></script>
+@stop
